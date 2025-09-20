@@ -1,21 +1,41 @@
-# Notebook MCP Server
+# Immich Telegram Random Photo MCP Server
 
-## Documentation
+MCP (Model Context Protocol) server that fetches random photos from your Immich server and sends them to Telegram.
 
-For detailed information about the project architecture, development standards, and contribution guidelines, please refer to the [INSTRUCTIONS.md](./INSTRUCTIONS.md) file.
+## Features
 
-## CI/CD
+- Fetches random photos from Immich API
+- Sends photos to Telegram
+- AI-powered filtering to avoid sending screenshots and document photos
+- Configurable number of photos to send
 
-The project uses GitHub Actions for continuous integration and deployment:
+## Installation
 
-- On push to main branch: Runs tests, linting, builds the project, and deploys to production
-- On pull requests: Runs tests, linting, and builds the project
+```bash
+npm install
+```
 
-For deployment, the project can be deployed in two ways:
+## Configuration
 
-- Using Docker (with provided Dockerfile and docker-compose.yml)
+Set the following environment variables:
 
-To deploy with Docker:
+- `IMMICH_API_URL` - Your Immich server API URL
+- `IMMICH_API_KEY` - Your Immich API key
+- `TELEGRAM_BOT_TOKEN` - Your Telegram bot token
+- `TELEGRAM_CHAT_ID` - Target chat ID for sending photos
+
+## Usage
+
+```bash
+# Development
+npm run start:dev
+
+# Production
+npm run build
+npm run start:prod
+```
+
+## Docker
 
 ```bash
 # Build and start the container
@@ -27,3 +47,7 @@ docker-compose logs -f
 # Stop the container
 docker-compose down
 ```
+
+## Documentation
+
+For detailed information about the project architecture, development standards, and contribution guidelines, please refer to the [INSTRUCTIONS.md](./INSTRUCTIONS.md) file.
