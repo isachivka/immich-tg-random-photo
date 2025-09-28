@@ -4,6 +4,7 @@ import { McpServerModule } from './mcp/mcp.module';
 import { ImmichModule } from './immich/immich.module';
 import { ImageCompressionModule } from './image-compression/image-compression.module';
 import { TelegramModule } from './telegram/telegram.module';
+import { FinalModule } from './final/final.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { TelegramModule } from './telegram/telegram.module';
     ImmichModule,
     ImageCompressionModule,
     TelegramModule,
+    FinalModule,
   ],
   controllers: [],
   providers: [],

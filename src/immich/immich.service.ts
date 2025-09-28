@@ -1,6 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AssetMediaSize, getRandom, init, viewAsset, getAssetInfo } from '@immich/sdk';
+import {
+  AssetMediaSize,
+  getRandom,
+  init,
+  viewAsset,
+  getAssetInfo,
+  AssetResponseDto,
+} from '@immich/sdk';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -31,7 +38,7 @@ export class ImmichService {
 
   async downloadRandomPhotos(
     count: number,
-  ): Promise<{ filePath: string; asset: any; assetInfo: any }[]> {
+  ): Promise<{ filePath: string; asset: AssetResponseDto; assetInfo: AssetResponseDto }[]> {
     const assets = await getRandom({ count });
     const assetsInfo = await Promise.all(assets.map(asset => getAssetInfo({ id: asset.id })));
     const blobs = await Promise.all(
