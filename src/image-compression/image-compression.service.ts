@@ -6,6 +6,7 @@ export interface CompressionOptions {
   maxSize?: number;
   quality?: number;
   format?: 'jpeg' | 'png' | 'webp';
+  orientation?: number;
 }
 
 @Injectable()
@@ -19,7 +20,7 @@ export class ImageCompressionService {
    * @returns Promise<string> Путь к сжатому изображению (тот же, что и исходный)
    */
   async compress(imagePath: string, options: CompressionOptions = {}): Promise<string> {
-    const { maxSize = 1920, quality = 85 } = options;
+    const { maxSize = 1920, quality = 90, orientation } = options;
 
     try {
       this.logger.log(`Starting compression of ${imagePath}`);
@@ -32,7 +33,7 @@ export class ImageCompressionService {
       // Получаем информацию об изображении
       const metadata = await sharp(imagePath).metadata();
       this.logger.log(
-        `Original image: ${metadata.width}x${metadata.height}, format: ${metadata.format}`,
+        `Original image: ${metadata.width}x${metadata.height}, format: ${metadata.format}, orientation: ${metadata.orientation || 'unknown'}`,
       );
 
       // Определяем размеры для сжатия
@@ -44,8 +45,17 @@ export class ImageCompressionService {
 
       this.logger.log(`Target dimensions: ${width}x${height}`);
 
+      // Создаем Sharp pipeline
+      let sharpInstance = sharp(imagePath);
+
+      // Применяем ориентацию если указана
+      if (orientation && orientation !== 1) {
+        this.logger.log(`Applying orientation correction: ${orientation}`);
+        sharpInstance = sharpInstance.rotate();
+      }
+
       // Сжимаем изображение
-      const compressedBuffer = await sharp(imagePath)
+      const compressedBuffer = await sharpInstance
         .resize(width, height, {
           fit: 'inside',
           withoutEnlargement: true,

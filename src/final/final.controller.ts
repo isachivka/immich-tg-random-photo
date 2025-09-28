@@ -17,9 +17,13 @@ export class FinalController {
     // Получаем 10 рандомных фотографий
     const photos = await this.immichService.downloadRandomPhotos(10);
 
-    // Сжимаем каждую фотографию до 1920px
+    // Сжимаем каждую фотографию до 1920px с учетом ориентации
     for (const photo of photos) {
-      await this.imageCompressionService.compress(photo.filePath);
+      const orientationStr = photo.assetInfo.exifInfo?.orientation;
+      const orientation = orientationStr ? parseInt(orientationStr, 10) : undefined;
+      await this.imageCompressionService.compress(photo.filePath, {
+        orientation: orientation,
+      });
     }
 
     // Создаем описание из assetInfo
