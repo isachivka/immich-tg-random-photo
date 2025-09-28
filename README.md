@@ -5,9 +5,10 @@ MCP (Model Context Protocol) server that fetches random photos from your Immich 
 ## Features
 
 - Fetches random photos from Immich API
-- Sends photos to Telegram
+- Sends photos to Telegram via Telegraf bot API
 - AI-powered filtering to avoid sending screenshots and document photos
 - Image compression service with configurable settings
+- Batch photo sending (up to 10 photos per message)
 - Configurable number of photos to send
 
 ## Installation

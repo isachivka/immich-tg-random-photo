@@ -10,7 +10,7 @@ This MCP (Model Context Protocol) server provides functionality to fetch random 
 
 - **MCP Server**: Built with NestJS and the MCP NestJS implementation
 - **Immich Integration**: Fetches photos from Immich API
-- **Telegram Integration**: Sends photos to Telegram via bot API
+- **Telegram Integration**: Sends photos to Telegram via Telegraf bot API
 - **AI Filtering**: Filters out screenshots and document photos
 - **Image Compression**: Compresses images to specified dimensions
 
@@ -32,6 +32,11 @@ src/
 │   ├── immich.service.ts
 │   ├── immich.module.ts
 │   └── index.ts
+├── telegram/             # Telegram integration
+│   ├── telegram.service.ts
+│   ├── telegram.controller.ts  # HTTP API для тестирования
+│   ├── telegram.module.ts
+│   └── index.ts
 └── mcp/                  # MCP server implementation
     └── mcp.module.ts
 ```
@@ -49,7 +54,7 @@ src/
 
 - `IMMICH_API_URL`: Immich server API endpoint
 - `IMMICH_API_KEY`: API key for Immich authentication
-- `TELEGRAM_BOT_TOKEN`: Telegram bot token
+- `TELEGRAM_BOT_TOKEN`: Telegram bot token for Telegraf
 - `TELEGRAM_CHAT_ID`: Target chat ID for photo delivery
 
 ### API Design
@@ -75,9 +80,10 @@ src/
 
 ### Phase 3: Telegram Integration
 
-- [ ] Implement Telegram bot client
-- [ ] Add photo sending functionality
-- [ ] Handle file uploads and media types
+- [x] Implement TelegramService with Telegraf
+- [x] Add sendPhotos method for batch photo sending
+- [x] Support up to 10 photos per message with captions
+- [x] Handle single photo and media group sending
 
 ### Phase 4: AI Filtering
 
