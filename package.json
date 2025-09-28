@@ -1,7 +1,7 @@
 {
   "name": "immich-tg-random-photo",
   "version": "0.0.1",
-  "description": "MCP server for sending random photos from Immich to Telegram",
+  "description": "NestJS application that automatically sends random photos from Immich to Telegram",
   "author": "",
   "private": false,
   "license": "MIT",

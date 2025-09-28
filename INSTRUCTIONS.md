@@ -1,18 +1,18 @@
-# Immich Telegram Random Photo MCP Server - Development Instructions
+# Immich Telegram Photo Bot - Development Instructions
 
 ## Project Overview
 
-This MCP (Model Context Protocol) server provides functionality to fetch random photos from an Immich server and send them to Telegram. The server includes AI-powered filtering to avoid sending screenshots and document photos.
+This NestJS application automatically fetches random photos from an Immich server and sends them to Telegram. The application includes image compression, batch sending, and HTTP API for testing and manual triggers.
 
 ## Architecture
 
 ### Core Components
 
-- **MCP Server**: Built with NestJS and the MCP NestJS implementation
+- **NestJS Application**: Built with NestJS framework
 - **Immich Integration**: Fetches photos from Immich API
 - **Telegram Integration**: Sends photos to Telegram via Telegraf bot API
-- **AI Filtering**: Filters out screenshots and document photos
 - **Image Compression**: Compresses images to specified dimensions
+- **HTTP API**: Provides endpoints for testing and manual triggers
 
 ### Project Structure
 
@@ -66,17 +66,17 @@ src/
 
 ## Implementation Plan
 
-### Phase 1: Basic MCP Server
+### Phase 1: Basic NestJS Application
 
-- [ ] Set up basic MCP server structure
-- [ ] Implement configuration management
-- [ ] Add basic health check endpoint
+- [x] Set up basic NestJS application structure
+- [x] Implement configuration management
+- [x] Add basic HTTP endpoints
 
 ### Phase 2: Immich Integration
 
-- [ ] Implement Immich API client
-- [ ] Add photo fetching functionality
-- [ ] Handle authentication and rate limiting
+- [x] Implement Immich API client
+- [x] Add photo fetching functionality
+- [x] Handle authentication and rate limiting
 
 ### Phase 3: Telegram Integration
 
@@ -85,32 +85,32 @@ src/
 - [x] Support up to 10 photos per message with captions
 - [x] Handle single photo and media group sending
 
-### Phase 4: AI Filtering
-
-- [ ] Integrate AI service for image analysis
-- [ ] Implement screenshot detection
-- [ ] Add document photo filtering
-- [ ] Create filtering rules and thresholds
-
-### Phase 5: Image Compression
+### Phase 4: Image Compression
 
 - [x] Implement ImageCompressionService with compress method
 - [x] Add Sharp dependency for image processing
 - [x] Support default compression to 1920px on larger side
 - [x] Overwrite original file with compressed version
 
-### Phase 6: MCP Tools
+### Phase 5: HTTP API
 
-- [ ] Create MCP tools for photo operations
-- [ ] Add configuration management tools
-- [ ] Implement monitoring and logging tools
+- [x] Create HTTP endpoints for photo operations
+- [x] Add testing endpoints for Telegram integration
+- [x] Implement error handling and validation
+
+### Phase 6: Production Features
+
+- [x] Docker containerization
+- [x] Environment-based configuration
+- [x] Logging and error tracking
+- [x] Automatic cleanup of temporary files
 
 ## Testing
 
 - Integration tests for image compression service with real images
 - Unit tests for all services
 - Integration tests for API endpoints
-- E2E tests for MCP tool functionality
+- E2E tests for HTTP API functionality
 - Performance tests for photo processing
 
 ## Deployment

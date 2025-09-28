@@ -1,15 +1,16 @@
-# Immich Telegram Random Photo MCP Server
+# Immich Telegram Photo Bot
 
-MCP (Model Context Protocol) server that fetches random photos from your Immich server and sends them to Telegram.
+A NestJS application that automatically sends random photos from your Immich server to Telegram. Perfect for sharing memories and creating photo streams in your Telegram chats.
 
 ## Features
 
 - Fetches random photos from Immich API
 - Sends photos to Telegram via Telegraf bot API
-- AI-powered filtering to avoid sending screenshots and document photos
 - Image compression service with configurable settings
 - Batch photo sending (up to 10 photos per message)
-- Configurable number of photos to send
+- Automatic cleanup of temporary files
+- HTTP API for testing and manual triggers
+- Docker support for easy deployment
 
 ## Installation
 
@@ -28,14 +29,29 @@ Set the following environment variables:
 
 ## Usage
 
-```bash
-# Development
-npm run start:dev
+### Development
 
-# Production
+```bash
+# Start development server
+npm run start:dev
+```
+
+### Production
+
+```bash
+# Build and start production server
 npm run build
 npm run start:prod
 ```
+
+### HTTP API Endpoints
+
+Once running, you can use these endpoints:
+
+- `POST /final/send-random-photos` - Send 10 random photos to Telegram
+- `POST /telegram/send-photos` - Send specific photos to Telegram
+- `POST /telegram/test-send-photos` - Send test photo to Telegram
+- `POST /telegram/check-connection` - Check Telegram bot connection
 
 ## Docker
 
