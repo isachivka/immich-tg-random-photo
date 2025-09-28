@@ -90,6 +90,29 @@ export class TelegramService {
   }
 
   /**
+   * Отправляет текстовое сообщение в Telegram
+   * @param message Текст сообщения
+   * @param parseMode Режим парсинга ('HTML' или 'Markdown')
+   * @returns Promise с результатом отправки
+   */
+  async sendMessage(message: string, parseMode: 'HTML' | 'Markdown' = 'HTML'): Promise<any> {
+    try {
+      this.logger.log(`Sending text message to Telegram with parse mode: ${parseMode}`);
+
+      const chatId = this.configService.get<string>('TELEGRAM_CHAT_ID');
+      const result = await this.bot.telegram.sendMessage(chatId, message, {
+        parse_mode: parseMode,
+      });
+
+      this.logger.log(`Successfully sent text message to Telegram`);
+      return result;
+    } catch (error) {
+      this.logger.error(`Error sending text message to Telegram:`, error);
+      throw error;
+    }
+  }
+
+  /**
    * Проверяет соединение с Telegram Bot API
    */
   async checkConnection(): Promise<boolean> {
