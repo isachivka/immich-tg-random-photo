@@ -7,6 +7,7 @@ MCP (Model Context Protocol) server that fetches random photos from your Immich 
 - Fetches random photos from Immich API
 - Sends photos to Telegram
 - AI-powered filtering to avoid sending screenshots and document photos
+- Image compression service with configurable settings
 - Configurable number of photos to send
 
 ## Installation
