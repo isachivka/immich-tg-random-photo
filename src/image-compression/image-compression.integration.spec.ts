@@ -21,7 +21,7 @@ describe('ImageCompressionService Integration Tests', () => {
   });
 
   beforeEach(() => {
-    // Копируем оригинальное изображение для каждого теста
+    // Copy original image for each test
     if (fs.existsSync(originalImagePath)) {
       fs.copyFileSync(originalImagePath, testImagePath);
     }
@@ -38,20 +38,12 @@ describe('ImageCompressionService Integration Tests', () => {
       const originalMetadata = await sharp(testImagePath).metadata();
       const originalSize = fs.statSync(testImagePath).size;
 
-      console.log(
-        `Original image: ${originalMetadata.width}x${originalMetadata.height}, size: ${originalSize} bytes`,
-      );
-
       const compressedPath = await service.compress(testImagePath);
 
       expect(compressedPath).toBe(testImagePath);
 
       const compressedMetadata = await sharp(testImagePath).metadata();
       const compressedSize = fs.statSync(testImagePath).size;
-
-      console.log(
-        `Compressed image: ${compressedMetadata.width}x${compressedMetadata.height}, size: ${compressedSize} bytes`,
-      );
 
       expect(compressedSize).toBeLessThan(originalSize);
 

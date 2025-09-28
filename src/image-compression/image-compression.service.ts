@@ -14,10 +14,10 @@ export class ImageCompressionService {
   private readonly logger = new Logger(ImageCompressionService.name);
 
   /**
-   * Сжимает изображение до указанного размера по большей стороне
-   * @param imagePath Путь к исходному изображению
-   * @param options Опции сжатия
-   * @returns Promise<string> Путь к сжатому изображению (тот же, что и исходный)
+   * Compresses image to specified size on larger side
+   * @param imagePath Path to source image
+   * @param options Compression options
+   * @returns Promise<string> Path to compressed image (same as source)
    */
   async compress(imagePath: string, options: CompressionOptions = {}): Promise<string> {
     const { maxSize = 1920, quality = 90, orientation } = options;
@@ -25,18 +25,18 @@ export class ImageCompressionService {
     try {
       this.logger.log(`Starting compression of ${imagePath}`);
 
-      // Проверяем существование файла
+      // Check file existence
       if (!fs.existsSync(imagePath)) {
         throw new Error(`File not found: ${imagePath}`);
       }
 
-      // Получаем информацию об изображении
+      // Get image information
       const metadata = await sharp(imagePath).metadata();
       this.logger.log(
         `Original image: ${metadata.width}x${metadata.height}, format: ${metadata.format}, orientation: ${metadata.orientation || 'unknown'}`,
       );
 
-      // Определяем размеры для сжатия
+      // Calculate compression dimensions
       const { width, height } = this.calculateDimensions(
         metadata.width || 0,
         metadata.height || 0,
@@ -45,16 +45,16 @@ export class ImageCompressionService {
 
       this.logger.log(`Target dimensions: ${width}x${height}`);
 
-      // Создаем Sharp pipeline
+      // Create Sharp pipeline
       let sharpInstance = sharp(imagePath);
 
-      // Применяем ориентацию если указана
+      // Apply orientation if specified
       if (orientation && orientation !== 1) {
         this.logger.log(`Applying orientation correction: ${orientation}`);
         sharpInstance = sharpInstance.rotate();
       }
 
-      // Сжимаем изображение
+      // Compress image
       const compressedBuffer = await sharpInstance
         .resize(width, height, {
           fit: 'inside',
@@ -63,7 +63,7 @@ export class ImageCompressionService {
         .jpeg({ quality })
         .toBuffer();
 
-      // Записываем сжатое изображение в оригинальный путь
+      // Write compressed image to original path
       fs.writeFileSync(imagePath, compressedBuffer);
 
       this.logger.log(`Image compressed successfully: ${imagePath}`);
@@ -75,7 +75,7 @@ export class ImageCompressionService {
   }
 
   /**
-   * Вычисляет размеры для сжатия с сохранением пропорций
+   * Calculates compression dimensions while preserving aspect ratio
    */
   private calculateDimensions(
     originalWidth: number,
@@ -102,7 +102,7 @@ export class ImageCompressionService {
   }
 
   /**
-   * Получает информацию об изображении
+   * Gets image information
    */
   async getImageInfo(imagePath: string): Promise<sharp.Metadata> {
     try {

@@ -1,66 +1,66 @@
 # Image Compression Service
 
-Сервис для сжатия изображений с использованием библиотеки Sharp.
+Service for compressing images using the Sharp library.
 
-## Использование
+## Usage
 
-### Базовое использование
+### Basic Usage
 
 ```typescript
 import { ImageCompressionService } from './image-compression.service';
 
-// Инжектируем сервис
+// Inject service
 constructor(private readonly imageCompressionService: ImageCompressionService) {}
 
-// Сжимаем изображение с настройками по умолчанию
-// (1920px по большей стороне, качество 85%, формат JPEG)
+// Compress image with default settings
+// (1920px on larger side, 85% quality, JPEG format)
 const compressedPath = await this.imageCompressionService.compress('/path/to/image.jpg');
 ```
 
-### Расширенные настройки
+### Advanced Settings
 
 ```typescript
-// Сжимаем с кастомными параметрами
+// Compress with custom parameters
 const compressedPath = await this.imageCompressionService.compress('/path/to/image.jpg', {
-  maxSize: 1024, // Максимальный размер по большей стороне
-  quality: 90, // Качество JPEG (1-100)
-  format: 'jpeg', // Формат выходного файла
+  maxSize: 1024, // Maximum size on larger side
+  quality: 90, // JPEG quality (1-100)
+  format: 'jpeg', // Output file format
 });
 ```
 
 ## API
 
-### Метод `compress(imagePath: string, options?: CompressionOptions): Promise<string>`
+### Method `compress(imagePath: string, options?: CompressionOptions): Promise<string>`
 
-Сжимает изображение и сохраняет результат в оригинальный путь.
+Compresses image and saves result to original path.
 
-**Параметры:**
+**Parameters:**
 
-- `imagePath` - путь к исходному изображению
-- `options` - опции сжатия (опционально)
+- `imagePath` - path to source image
+- `options` - compression options (optional)
 
-**Опции сжатия:**
+**Compression Options:**
 
-- `maxSize?: number` - максимальный размер по большей стороне (по умолчанию: 1920)
-- `quality?: number` - качество JPEG (по умолчанию: 85)
-- `format?: 'jpeg' | 'png' | 'webp'` - формат выходного файла (по умолчанию: 'jpeg')
+- `maxSize?: number` - maximum size on larger side (default: 1920)
+- `quality?: number` - JPEG quality (default: 85)
+- `format?: 'jpeg' | 'png' | 'webp'` - output file format (default: 'jpeg')
 
-**Возвращает:** Promise с путем к сжатому изображению (тот же, что и исходный)
+**Returns:** Promise with path to compressed image (same as source)
 
-### Метод `getImageInfo(imagePath: string): Promise<sharp.Metadata>`
+### Method `getImageInfo(imagePath: string): Promise<sharp.Metadata>`
 
-Получает информацию об изображении.
+Gets image information.
 
-**Параметры:**
+**Parameters:**
 
-- `imagePath` - путь к изображению
+- `imagePath` - path to image
 
-**Возвращает:** Promise с метаданными изображения
+**Returns:** Promise with image metadata
 
-## Особенности
+## Features
 
-- Сохраняет пропорции изображения
-- Не увеличивает изображения, которые уже меньше целевого размера
-- Перезаписывает оригинальный файл сжатой версией
-- Поддерживает логирование операций
-- Обрабатывает ошибки с подробным логированием
+- Preserves image aspect ratio
+- Does not enlarge images that are already smaller than target size
+- Overwrites original file with compressed version
+- Supports operation logging
+- Handles errors with detailed logging

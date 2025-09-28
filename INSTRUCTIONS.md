@@ -34,7 +34,7 @@ src/
 │   └── index.ts
 ├── telegram/             # Telegram integration
 │   ├── telegram.service.ts
-│   ├── telegram.controller.ts  # HTTP API для тестирования
+│   ├── telegram.controller.ts  # HTTP API for testing
 │   ├── telegram.module.ts
 │   └── index.ts
 └── mcp/                  # MCP server implementation

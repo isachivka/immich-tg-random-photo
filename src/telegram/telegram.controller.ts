@@ -16,7 +16,7 @@ export class TelegramController {
   constructor(private readonly telegramService: TelegramService) {}
 
   /**
-   * Отправляет фотографии в Telegram
+   * Sends photos to Telegram
    * POST /telegram/send-photos
    */
   @Post('send-photos')
@@ -55,7 +55,7 @@ export class TelegramController {
   }
 
   /**
-   * Тестовый эндпоинт для отправки тестовой фотографии
+   * Test endpoint for sending test photo
    * POST /telegram/test-send-photos
    */
   @Post('test-send-photos')
@@ -63,7 +63,7 @@ export class TelegramController {
     try {
       const { caption } = request;
 
-      // Используем тестовое изображение
+      // Use test image
       const testImagePath = path.join(process.cwd(), 'test', 'images', 'test-image.jpg');
 
       const result = await this.telegramService.sendPhotos([testImagePath], caption);
@@ -88,7 +88,7 @@ export class TelegramController {
   }
 
   /**
-   * Проверяет соединение с Telegram Bot API
+   * Checks connection to Telegram Bot API
    * POST /telegram/check-connection
    */
   @Post('check-connection')
@@ -116,7 +116,7 @@ export class TelegramController {
   }
 
   /**
-   * Получает информацию о боте
+   * Gets bot information
    * POST /telegram/bot-info
    */
   @Post('bot-info')

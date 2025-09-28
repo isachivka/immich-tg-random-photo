@@ -26,16 +26,16 @@ export class TelegramService {
   }
 
   /**
-   * Отправляет пачку фотографий в Telegram с описанием
-   * @param photos Массив путей к фотографиям (до 10 штук)
-   * @param caption Описание к фотографиям
-   * @returns Promise с результатом отправки
+   * Sends a batch of photos to Telegram with caption
+   * @param photos Array of photo file paths (up to 10 photos)
+   * @param caption Caption for the photos
+   * @returns Promise with send result
    */
   async sendPhotos(photos: string[], caption?: string): Promise<any> {
     try {
       this.logger.log(`Sending ${photos.length} photos to Telegram`);
 
-      // Проверяем количество фотографий
+      // Check photo count
       if (photos.length === 0) {
         throw new Error('No photos provided');
       }
@@ -44,7 +44,7 @@ export class TelegramService {
         throw new Error('Maximum 10 photos allowed per message');
       }
 
-      // Проверяем существование файлов
+      // Check file existence
       const validPhotos = [];
       for (const photoPath of photos) {
         if (!fs.existsSync(photoPath)) {
@@ -60,7 +60,7 @@ export class TelegramService {
 
       const chatId = this.configService.get<string>('TELEGRAM_CHAT_ID');
 
-      // Если одна фотография, отправляем как обычное фото
+      // If single photo, send as regular photo
       if (validPhotos.length === 1) {
         const result = await this.bot.telegram.sendPhoto(
           chatId,
@@ -72,7 +72,7 @@ export class TelegramService {
         return result;
       }
 
-      // Если несколько фотографий, отправляем как медиа-группу
+      // If multiple photos, send as media group
       const media = validPhotos.map((photoPath, index) => ({
         type: 'photo' as const,
         media: { source: photoPath },
@@ -90,10 +90,10 @@ export class TelegramService {
   }
 
   /**
-   * Отправляет текстовое сообщение в Telegram
-   * @param message Текст сообщения
-   * @param parseMode Режим парсинга ('HTML' или 'Markdown')
-   * @returns Promise с результатом отправки
+   * Sends a text message to Telegram
+   * @param message Message text
+   * @param parseMode Parse mode ('HTML' or 'Markdown')
+   * @returns Promise with send result
    */
   async sendMessage(message: string, parseMode: 'HTML' | 'Markdown' = 'HTML'): Promise<any> {
     try {
@@ -113,7 +113,7 @@ export class TelegramService {
   }
 
   /**
-   * Проверяет соединение с Telegram Bot API
+   * Checks connection to Telegram Bot API
    */
   async checkConnection(): Promise<boolean> {
     try {
@@ -127,7 +127,7 @@ export class TelegramService {
   }
 
   /**
-   * Получает информацию о боте
+   * Gets bot information
    */
   async getBotInfo(): Promise<any> {
     try {

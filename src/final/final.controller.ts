@@ -17,10 +17,10 @@ export class FinalController {
   @Post('send-random-photos')
   async sendRandomPhotos() {
     try {
-      // Получаем 10 рандомных фотографий
+      // Get 10 random photos
       const photos = await this.immichService.downloadRandomPhotos(10);
 
-      // Сжимаем каждую фотографию до 1920px с учетом ориентации
+      // Compress each photo to 1920px with orientation consideration
       for (const photo of photos) {
         const orientationStr = photo.assetInfo.exifInfo?.orientation;
         const orientation = orientationStr ? parseInt(orientationStr, 10) : undefined;
@@ -29,7 +29,7 @@ export class FinalController {
         });
       }
 
-      // Создаем описание из assetInfo с ссылками на Immich
+      // Create description from assetInfo with Immich links
       const immichBaseUrl = this.configService.get<string>('IMMICH_PUBLIC_URL');
       const descriptions = photos.map(photo => {
         const info = photo.assetInfo;
@@ -46,10 +46,10 @@ export class FinalController {
           });
         }
 
-        // Формируем описание: страна и город только если есть, потом дата
+        // Build description: country and city only if available, then date
         let description = '';
 
-        // Сокращаем названия для удобства
+        // Shorten names for convenience
         let shortCountry = country;
         let shortCity = city;
 
@@ -77,11 +77,11 @@ export class FinalController {
       const emojis = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
       const caption = ``;
 
-      // Отправляем все фотографии в Telegram
+      // Send all photos to Telegram
       const photoPaths = photos.map(photo => photo.filePath);
       const result = await this.telegramService.sendPhotos(photoPaths, caption);
 
-      // Отправляем описания с ссылками на фотографии в Immich отдельным сообщением
+      // Send descriptions with Immich photo links as separate message
       const linksMessage = `${photos
         .map((photo, index) => {
           const immichUrl = `${immichBaseUrl}/photos/${photo.asset.id}`;
@@ -92,19 +92,14 @@ export class FinalController {
 
       await this.telegramService.sendMessage(linksMessage, 'HTML');
 
-      // Выводим ссылки на фотографии в Immich в консоль для отладки
-      console.log('\n=== IMMICH LINKS ===');
-      console.log(linksMessage);
-      console.log('===================\n');
-
-      // Удаляем временные файлы после отправки
+      // Clean up temporary files after sending
       for (const photo of photos) {
         try {
           if (fs.existsSync(photo.filePath)) {
             fs.unlinkSync(photo.filePath);
           }
-        } catch (error) {
-          console.error(`Failed to delete file ${photo.filePath}:`, error);
+        } catch {
+          // Log error but continue cleanup
         }
       }
 
@@ -119,7 +114,6 @@ export class FinalController {
         result,
       };
     } catch (error) {
-      console.error('Error in sendRandomPhotos:', error);
       throw error;
     }
   }

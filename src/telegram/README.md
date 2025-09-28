@@ -1,137 +1,137 @@
 # Telegram Service
 
-Сервис для отправки фотографий в Telegram с использованием библиотеки Telegraf.
+Service for sending photos to Telegram using the Telegraf library.
 
-## Использование
+## Usage
 
-### Базовое использование
+### Basic Usage
 
 ```typescript
 import { TelegramService } from './telegram.service';
 
-// Инжектируем сервис
+// Inject service
 constructor(private readonly telegramService: TelegramService) {}
 
-// Отправляем одну фотографию с описанием
-await this.telegramService.sendPhotos(['/path/to/photo.jpg'], 'Описание фотографии');
+// Send single photo with caption
+await this.telegramService.sendPhotos(['/path/to/photo.jpg'], 'Photo description');
 
-// Отправляем несколько фотографий
+// Send multiple photos
 await this.telegramService.sendPhotos([
   '/path/to/photo1.jpg',
   '/path/to/photo2.jpg',
   '/path/to/photo3.jpg'
-], 'Пачка фотографий');
+], 'Photo batch');
 ```
 
-### Проверка соединения
+### Connection Check
 
 ```typescript
-// Проверяем соединение с Telegram Bot API
+// Check connection to Telegram Bot API
 const isConnected = await this.telegramService.checkConnection();
 if (isConnected) {
-  console.log('Соединение с Telegram установлено');
+  console.log('Connected to Telegram');
 }
 
-// Получаем информацию о боте
+// Get bot information
 const botInfo = await this.telegramService.getBotInfo();
-console.log(`Бот: @${botInfo.username}`);
+console.log(`Bot: @${botInfo.username}`);
 ```
 
 ## API
 
-### Метод `sendPhotos(photos: string[], caption?: string): Promise<any>`
+### Method `sendPhotos(photos: string[], caption?: string): Promise<any>`
 
-Отправляет пачку фотографий в Telegram с описанием.
+Sends a batch of photos to Telegram with caption.
 
-**Параметры:**
+**Parameters:**
 
-- `photos` - массив путей к фотографиям (до 10 штук)
-- `caption` - описание к фотографиям (опционально)
+- `photos` - array of photo file paths (up to 10 photos)
+- `caption` - caption for photos (optional)
 
-**Возвращает:** Promise с результатом отправки
+**Returns:** Promise with send result
 
-**Особенности:**
+**Features:**
 
-- Если передана одна фотография, отправляется как обычное фото
-- Если передано несколько фотографий, отправляется как медиа-группа
-- Описание добавляется к первой фотографии в группе
-- Автоматически фильтрует несуществующие файлы
-- Максимум 10 фотографий за один вызов
+- If single photo provided, sends as regular photo
+- If multiple photos provided, sends as media group
+- Caption is added to first photo in group
+- Automatically filters non-existent files
+- Maximum 10 photos per call
 
-### Метод `checkConnection(): Promise<boolean>`
+### Method `checkConnection(): Promise<boolean>`
 
-Проверяет соединение с Telegram Bot API.
+Checks connection to Telegram Bot API.
 
-**Возвращает:** Promise с булевым значением (true если соединение успешно)
+**Returns:** Promise with boolean value (true if connection successful)
 
-### Метод `getBotInfo(): Promise<any>`
+### Method `getBotInfo(): Promise<any>`
 
-Получает информацию о боте.
+Gets bot information.
 
-**Возвращает:** Promise с информацией о боте
+**Returns:** Promise with bot information
 
-## Конфигурация
+## Configuration
 
-Сервис использует следующие переменные окружения:
+Service uses the following environment variables:
 
-- `TELEGRAM_BOT_TOKEN` - токен Telegram бота
-- `TELEGRAM_CHAT_ID` - ID чата для отправки фотографий
+- `TELEGRAM_BOT_TOKEN` - Telegram bot token
+- `TELEGRAM_CHAT_ID` - Chat ID for sending photos
 
-## Обработка ошибок
+## Error Handling
 
-Сервис включает подробное логирование и обработку ошибок:
+Service includes detailed logging and error handling:
 
-- Проверка существования файлов
-- Валидация количества фотографий
-- Обработка ошибок API Telegram
-- Логирование всех операций
+- File existence check
+- Photo count validation
+- Telegram API error handling
+- Operation logging
 
-## HTTP API (для тестирования)
+## HTTP API (for testing)
 
-Контроллер предоставляет HTTP эндпоинты для тестирования функциональности:
+Controller provides HTTP endpoints for testing functionality:
 
-### Активация контроллера
+### Controller Activation
 
-Для активации контроллера раскомментируйте строки в `telegram.module.ts`:
+To activate controller, uncomment lines in `telegram.module.ts`:
 
 ```typescript
 import { TelegramController } from './telegram.controller';
 
 @Module({
-  controllers: [TelegramController], // Раскомментировать для тестирования
+  controllers: [TelegramController], // Uncomment for testing
   providers: [TelegramService],
   exports: [TelegramService],
 })
 ```
 
-### Эндпоинты
+### Endpoints
 
 #### POST `/telegram/test-send-photos`
 
-Отправляет тестовую фотографию с описанием.
+Sends test photo with caption.
 
 ```bash
 curl -X POST http://localhost:3000/telegram/test-send-photos \
   -H "Content-Type: application/json" \
-  -d '{"caption": "Тестовая фотография!"}'
+  -d '{"caption": "Test photo!"}'
 ```
 
 #### POST `/telegram/send-photos`
 
-Отправляет указанные фотографии.
+Sends specified photos.
 
 ```bash
 curl -X POST http://localhost:3000/telegram/send-photos \
   -H "Content-Type: application/json" \
   -d '{
     "photos": ["/path/to/photo1.jpg", "/path/to/photo2.jpg"],
-    "caption": "Описание фотографий"
+    "caption": "Photo descriptions"
   }'
 ```
 
 #### POST `/telegram/check-connection`
 
-Проверяет соединение с Telegram Bot API.
+Checks connection to Telegram Bot API.
 
 ```bash
 curl -X POST http://localhost:3000/telegram/check-connection \
@@ -140,33 +140,30 @@ curl -X POST http://localhost:3000/telegram/check-connection \
 
 #### POST `/telegram/bot-info`
 
-Получает информацию о боте.
+Gets bot information.
 
 ```bash
 curl -X POST http://localhost:3000/telegram/bot-info \
   -H "Content-Type: application/json"
 ```
 
-## Примеры использования
+## Usage Examples
 
-### Отправка одной фотографии
+### Send Single Photo
 
 ```typescript
-const result = await telegramService.sendPhotos(
-  ['/path/to/single-photo.jpg'],
-  'Красивая фотография',
-);
+const result = await telegramService.sendPhotos(['/path/to/single-photo.jpg'], 'Beautiful photo');
 ```
 
-### Отправка нескольких фотографий
+### Send Multiple Photos
 
 ```typescript
 const photos = ['/path/to/photo1.jpg', '/path/to/photo2.jpg', '/path/to/photo3.jpg'];
 
-const result = await telegramService.sendPhotos(photos, 'Серия фотографий из отпуска');
+const result = await telegramService.sendPhotos(photos, 'Vacation photo series');
 ```
 
-### Отправка без описания
+### Send Without Caption
 
 ```typescript
 const result = await telegramService.sendPhotos(['/path/to/photo1.jpg', '/path/to/photo2.jpg']);
