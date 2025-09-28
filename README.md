@@ -15,7 +15,7 @@ A NestJS application that automatically sends random photos from your Immich ser
 ## Installation
 
 ```bash
-npm install
+npm i
 ```
 
 ## Configuration
